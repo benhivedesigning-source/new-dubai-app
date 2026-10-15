@@ -1,0 +1,6 @@
+{
+  "name": "SHIFT - Safety in Motion",
+  "description": "Logistics safety training platform and employee mobile app",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
