@@ -1,11 +1,11 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
 import { HeaderBar } from './HeaderBar';
-import { Play, Clock, ArrowRight, ShieldCheck, Award, FileText, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Play, Clock, ArrowRight, ShieldCheck, Award, FileText, AlertCircle } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export const HomeScreen: React.FC = () => {
-  const { userProfile, courses, setScreen, setSelectedCourseId, certificates, resources } = useApp();
+  const { userProfile, courses, setScreen, setSelectedCourseId, certificates, resources, t, isRtl } = useApp();
 
   const featuredCourse = courses.find(c => c.id === 'course-1') || courses[0];
   const nextUpCourses = courses.filter(c => c.id !== featuredCourse.id && c.status !== 'completed').slice(0, 3);
@@ -41,9 +41,9 @@ export const HomeScreen: React.FC = () => {
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-3">
               <span className="text-[11px] font-bold tracking-widest uppercase bg-[#C44724] px-2.5 py-1 rounded-full text-white">
-                Continue Learning
+                {t.continue_learning}
               </span>
-              <span className="text-xs text-[#DFE3DC] font-medium">Lesson {featuredCourse.completedLessonsCount + 1} of {featuredCourse.lessonsCount}</span>
+              <span className="text-xs text-[#DFE3DC] font-medium">{t.lesson_counter(featuredCourse.completedLessonsCount + 1, featuredCourse.lessonsCount)}</span>
             </div>
 
             <h2 className="text-xl font-extrabold font-['Manrope'] mb-1.5 leading-snug">{featuredCourse.title}</h2>
@@ -52,7 +52,7 @@ export const HomeScreen: React.FC = () => {
             {/* Progress Bar */}
             <div className="space-y-1.5 mb-5">
               <div className="flex justify-between text-xs font-semibold">
-                <span className="text-[#DFE3DC]">Progress</span>
+                <span className="text-[#DFE3DC]">{t.progress}</span>
                 <span className="text-[#D9ED96]">{featuredCourse.progress}%</span>
               </div>
               <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
@@ -66,14 +66,14 @@ export const HomeScreen: React.FC = () => {
             <div className="flex items-center justify-between pt-2 border-t border-white/10">
               <div className="flex items-center gap-1.5 text-xs text-[#DFE3DC]">
                 <Clock className="w-3.5 h-3.5 text-[#FF734A]" />
-                <span>8 min remaining</span>
+                <span>8 min</span>
               </div>
               <button
                 onClick={() => handleResumeCourse(featuredCourse.id)}
                 className="bg-[#C44724] hover:bg-[#b03d1c] text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md flex items-center gap-2 transition-all active:scale-95"
               >
-                <span>Resume training</span>
-                <Play className="w-3.5 h-3.5 fill-white" />
+                <span>{t.resume_training}</span>
+                <Play className={`w-3.5 h-3.5 fill-white ${isRtl ? 'rotate-180' : ''}`} />
               </button>
             </div>
           </div>
@@ -86,34 +86,34 @@ export const HomeScreen: React.FC = () => {
             className="bg-white p-3.5 rounded-2xl border border-[#DFE3DC] shadow-xs text-center cursor-pointer hover:border-[#C44724]/40 transition-all"
           >
             <div className="text-xl font-extrabold text-[#C44724] font-['Manrope'] mb-0.5">{inProgressCount}</div>
-            <div className="text-[11px] font-semibold text-[#172321]/70 leading-tight">In Progress</div>
+            <div className="text-[11px] font-semibold text-[#172321]/70 leading-tight">{t.in_progress}</div>
           </div>
           <div 
             onClick={() => setScreen('my_training')}
             className="bg-white p-3.5 rounded-2xl border border-[#DFE3DC] shadow-xs text-center cursor-pointer hover:border-[#C44724]/40 transition-all"
           >
             <div className="text-xl font-extrabold text-[#FF734A] font-['Manrope'] mb-0.5">{dueThisWeekCount}</div>
-            <div className="text-[11px] font-semibold text-[#172321]/70 leading-tight">Due This Week</div>
+            <div className="text-[11px] font-semibold text-[#172321]/70 leading-tight">{t.due_this_week}</div>
           </div>
           <div 
             onClick={() => setScreen('certificates')}
             className="bg-white p-3.5 rounded-2xl border border-[#DFE3DC] shadow-xs text-center cursor-pointer hover:border-[#C44724]/40 transition-all"
           >
             <div className="text-xl font-extrabold text-[#24624B] font-['Manrope'] mb-0.5">{completedCount}</div>
-            <div className="text-[11px] font-semibold text-[#172321]/70 leading-tight">Completed</div>
+            <div className="text-[11px] font-semibold text-[#172321]/70 leading-tight">{t.completed}</div>
           </div>
         </div>
 
         {/* Next Up Section */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-bold text-[#172321] font-['Manrope']">Next Up & Outstanding</h3>
+            <h3 className="text-sm font-bold text-[#172321] font-['Manrope']">{t.next_up_heading}</h3>
             <button 
               onClick={() => setScreen('my_training')}
               className="text-xs font-semibold text-[#C44724] hover:underline flex items-center gap-1"
             >
-              <span>View all</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span>{t.view_all}</span>
+              <ArrowRight className={`w-3.5 h-3.5 ${isRtl ? 'rotate-180' : ''}`} />
             </button>
           </div>
 
@@ -140,17 +140,17 @@ export const HomeScreen: React.FC = () => {
                       </h4>
                       {course.isMandatory && (
                         <span className="text-[9px] font-bold bg-[#172321]/10 text-[#172321] px-1.5 py-0.5 rounded shrink-0 ml-auto">
-                          Mandatory
+                          {t.mandatory}
                         </span>
                       )}
                     </div>
                     <p className="text-[11px] text-[#172321]/60 mt-0.5 truncate">
-                      Due: {course.dueDate} · {course.duration}
+                      {t.due}: {course.dueDate} · {course.duration}
                     </p>
                   </div>
                 </div>
                 <div className="w-7 h-7 rounded-full bg-[#F6F5F0] flex items-center justify-center text-[#172321]/60 group-hover:bg-[#C44724] group-hover:text-white transition-all shrink-0">
-                  →
+                  {isRtl ? '←' : '→'}
                 </div>
               </div>
             ))}
@@ -163,9 +163,9 @@ export const HomeScreen: React.FC = () => {
             <ShieldCheck className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-[#172321]">Safety Tip of the Shift</h4>
+            <h4 className="text-xs font-bold text-[#172321]">{t.safety_tip_title}</h4>
             <p className="text-xs text-[#172321]/80 mt-1 leading-relaxed">
-              Always maintain a strict 3-meter safety buffer around operating reach trucks and forklifts. Never cross behind a reversing vehicle without eye contact.
+              {t.safety_tip_body}
             </p>
           </div>
         </div>
@@ -176,12 +176,12 @@ export const HomeScreen: React.FC = () => {
             onClick={() => setScreen('certificates')}
             className="bg-white p-4 rounded-2xl border border-[#DFE3DC] hover:border-[#C44724]/40 shadow-xs flex items-center gap-3 text-left transition-all"
           >
-            <div className="w-10 h-10 rounded-xl bg-[#24624B]/10 text-[#24624B] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-[#24624B]/10 text-[#24624B] flex items-center justify-center shrink-0">
               <Award className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-xs font-bold text-[#172321]">My Certificates</h4>
-              <p className="text-[10px] text-[#172321]/60">{certificates.length} credentials</p>
+              <h4 className="text-xs font-bold text-[#172321]">{t.my_certificates}</h4>
+              <p className="text-[10px] text-[#172321]/60">{t.credentials_count(certificates.length)}</p>
             </div>
           </button>
 
@@ -189,12 +189,12 @@ export const HomeScreen: React.FC = () => {
             onClick={() => setScreen('resources')}
             className="bg-white p-4 rounded-2xl border border-[#DFE3DC] hover:border-[#C44724]/40 shadow-xs flex items-center gap-3 text-left transition-all"
           >
-            <div className="w-10 h-10 rounded-xl bg-[#406B85]/10 text-[#406B85] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-[#406B85]/10 text-[#406B85] flex items-center justify-center shrink-0">
               <FileText className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-xs font-bold text-[#172321]">Safety Resources</h4>
-              <p className="text-[10px] text-[#172321]/60">{resources.length} SOPs & guides</p>
+              <h4 className="text-xs font-bold text-[#172321]">{t.safety_resources}</h4>
+              <p className="text-[10px] text-[#172321]/60">{t.resources_count(resources.length)}</p>
             </div>
           </button>
         </div>

@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { Language } from '../types/safety';
-import { Shield, Eye, EyeOff, ArrowRight, Sparkles, MapPin, Globe, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
+import { Shield, Eye, EyeOff, ArrowRight, Sparkles, MapPin, Globe } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export const LoginScreen: React.FC = () => {
-  const { setIsLoggedIn, language, setLanguage, userProfile, setScreen, showToast, reducedMotion } = useApp();
+  const { setIsLoggedIn, language, setLanguage, userProfile, setScreen, showToast, reducedMotion, t, isRtl } = useApp();
   const [employeeId, setEmployeeId] = useState(userProfile.id);
-  const [password, setPassword] = useState('••••••••');
+  const [password, setPassword] = useState('Rahaf@Shift2026');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   const languages: Language[] = ['English', 'العربية', 'हिन्दी', 'اردو'];
-  const isRtl = language === 'العربية' || language === 'اردو';
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +21,7 @@ export const LoginScreen: React.FC = () => {
       setIsLoading(false);
       setIsLoggedIn(true);
       setScreen('home');
-      showToast(`Welcome back, ${userProfile.name}`);
+      showToast(`Welcome back, ${t.user_name}`);
     }, 600);
   };
 
@@ -32,7 +31,7 @@ export const LoginScreen: React.FC = () => {
       setIsLoading(false);
       setIsLoggedIn(true);
       setScreen('home');
-      showToast('Signed in as demo employee Alex Morgan');
+      showToast(`Signed in as demo employee ${t.user_name}`);
     }, 400);
   };
 
@@ -59,12 +58,12 @@ export const LoginScreen: React.FC = () => {
 
         <div className="flex items-center justify-between mb-6 relative z-10">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-[#C44724] flex items-center justify-center shadow-lg ring-2 ring-white/10">
+            <div className="w-10 h-10 rounded-2xl bg-[#C44724] flex items-center justify-center shadow-lg ring-2 ring-white/10 shrink-0">
               <Shield className="w-5 h-5 text-white" />
             </div>
             <div>
-              <span className="text-[10px] uppercase tracking-widest font-extrabold text-[#FF734A] block">Precision in Motion</span>
-              <span className="text-xs text-white/70 font-medium">Logistics Training Platform</span>
+              <span className="text-[10px] uppercase tracking-widest font-extrabold text-[#FF734A] block">{t.login_tagline_badge}</span>
+              <span className="text-xs text-white/70 font-medium">{t.login_subheading}</span>
             </div>
           </div>
 
@@ -90,7 +89,7 @@ export const LoginScreen: React.FC = () => {
           >
             <h1 className="text-4xl font-extrabold tracking-tight font-['Manrope'] mb-1 text-white">SHIFT</h1>
             <p className="text-sm text-[#DFE3DC] font-light max-w-[280px] italic leading-relaxed">
-              “Build safer habits. One shift at a time.”
+              {t.login_quote}
             </p>
           </motion.div>
         </div>
@@ -98,12 +97,12 @@ export const LoginScreen: React.FC = () => {
         {/* Location & Live Sync Banner */}
         <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-[#DFE3DC] relative z-10">
           <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-[#FF734A]" />
-            <span className="font-medium">Dubai Distribution Centre</span>
+            <MapPin className="w-4 h-4 text-[#FF734A] shrink-0" />
+            <span className="font-medium">{t.dubai_dc}</span>
           </div>
           <div className="flex items-center gap-1.5 bg-[#24624B]/70 px-3 py-1 rounded-full text-[#D9ED96] border border-[#24624B] shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-[#D9ED96] animate-pulse"></span>
-            <span className="font-semibold text-[11px]">Live Sync</span>
+            <span className="font-semibold text-[11px]">{t.live_sync}</span>
           </div>
         </div>
       </div>
@@ -115,34 +114,34 @@ export const LoginScreen: React.FC = () => {
           onClick={handleDemoExplore}
           className="bg-white p-4 rounded-3xl border-2 border-[#C44724]/40 shadow-md hover:border-[#C44724] transition-all cursor-pointer flex items-center gap-4 group relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 bg-[#C44724] text-white text-[9px] font-bold px-2.5 py-0.5 rounded-bl-xl uppercase tracking-wider">
-            Instant Demo
+          <div className={`absolute top-0 ${isRtl ? 'left-0 rounded-br-xl' : 'right-0 rounded-bl-xl'} bg-[#C44724] text-white text-[9px] font-bold px-2.5 py-0.5 uppercase tracking-wider`}>
+            {t.instant_demo}
           </div>
           <div className="w-12 h-12 rounded-2xl overflow-hidden border border-[#DFE3DC] shrink-0">
             <img src={userProfile.avatar} alt={userProfile.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5">
-              <h3 className="text-sm font-bold text-[#172321] truncate font-['Manrope']">{userProfile.name}</h3>
+              <h3 className="text-sm font-bold text-[#172321] truncate font-['Manrope']">{t.user_name}</h3>
               <Sparkles className="w-3.5 h-3.5 text-[#C44724] shrink-0" />
             </div>
             <p className="text-[11px] text-[#172321]/70 truncate">{userProfile.role} · {userProfile.id}</p>
           </div>
-          <div className="w-8 h-8 rounded-xl bg-[#C44724] text-white flex items-center justify-center shrink-0 shadow-md group-hover:translate-x-0.5 transition-transform">
-            →
+          <div className="w-8 h-8 rounded-xl bg-[#C44724] text-white flex items-center justify-center shrink-0 shadow-md group-hover:scale-105 transition-transform">
+            {isRtl ? '←' : '→'}
           </div>
         </div>
 
         <div className="relative flex py-1 items-center">
           <div className="flex-grow border-t border-[#DFE3DC]"></div>
-          <span className="flex-shrink mx-3 text-[11px] uppercase font-bold tracking-wider text-[#172321]/40">or sign in with ID</span>
+          <span className="flex-shrink mx-3 text-[11px] uppercase font-bold tracking-wider text-[#172321]/40">{t.or_sign_in}</span>
           <div className="flex-grow border-t border-[#DFE3DC]"></div>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-[#172321]/80 mb-1.5">
-              Employee ID or Work Email
+              {t.employee_id_label}
             </label>
             <input
               type="text"
@@ -150,21 +149,21 @@ export const LoginScreen: React.FC = () => {
               onChange={(e) => setEmployeeId(e.target.value)}
               required
               className="w-full relative bg-[#FFFFFF] border border-[#DFE3DC] rounded-2xl px-4 py-3.5 text-xs font-medium text-[#172321] focus:outline-none focus:border-[#C44724] focus:bg-[#FFFFFF] transition-all shadow-xs placeholder-[#172321]/40"
-              placeholder="e.g. EMP-89420"
+              placeholder={t.employee_id_placeholder}
             />
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="block text-xs font-bold uppercase tracking-wider text-[#172321]/80">
-                Password
+                {t.password_label}
               </label>
               <button 
                 type="button" 
-                onClick={() => showToast('Password reset link sent to registered supervisor email.')}
+                onClick={() => setScreen('forgot_password')}
                 className="text-xs text-[#C44724] font-semibold hover:underline"
               >
-                Forgot password?
+                {t.forgot_password}
               </button>
             </div>
             <div className="relative">
@@ -173,14 +172,15 @@ export const LoginScreen: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full bg-[#FFFFFF] border border-[#DFE3DC] rounded-2xl pl-4 pr-11 py-3.5 text-xs font-medium text-[#172321] focus:outline-none focus:border-[#C44724] focus:bg-[#FFFFFF] transition-all shadow-xs"
+                className={`w-full bg-[#FFFFFF] border border-[#DFE3DC] rounded-2xl ${isRtl ? 'pr-4 pl-11' : 'pl-4 pr-11'} py-3.5 text-xs font-medium text-[#172321] focus:outline-none focus:border-[#C44724] focus:bg-[#FFFFFF] transition-all shadow-xs`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#172321]/50 hover:text-[#172321]"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                className={`absolute ${isRtl ? 'left-3' : 'right-3'} top-1/2 -translate-y-1/2 p-1.5 rounded-lg transition-colors ${showPassword ? 'text-[#C44724] bg-[#C44724]/10' : 'text-[#172321]/50 hover:text-[#172321] hover:bg-[#F0EEE6]'}`}
               >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                {showPassword ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
               </button>
             </div>
           </div>
@@ -193,7 +193,7 @@ export const LoginScreen: React.FC = () => {
                 onChange={(e) => setRememberMe(e.target.checked)}
                 className="w-4 h-4 rounded text-[#C44724] focus:ring-[#C44724] border-[#DFE3DC]"
               />
-              <span className="text-[#172321]/80 font-medium">Remember this device</span>
+              <span className="text-[#172321]/80 font-medium">{t.remember_terminal}</span>
             </label>
           </div>
 
@@ -206,8 +206,8 @@ export const LoginScreen: React.FC = () => {
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             ) : (
               <>
-                <span className="text-sm">Sign in to SHIFT</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <span className="text-sm">{t.sign_in_button}</span>
+                <ArrowRight className={`w-4 h-4 ${isRtl ? 'rotate-180 group-hover:-translate-x-1' : 'group-hover:translate-x-1'} transition-transform`} />
               </>
             )}
           </button>

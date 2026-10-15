@@ -1,13 +1,13 @@
 import { Course, Certificate, SafetyResource, AppNotification, UserProfile } from '../types/safety';
 
 export const initialUserProfile: UserProfile = {
-  name: 'Alex Morgan',
+  name: 'Rahaf',
   id: 'EMP-89420',
   role: 'Warehouse Operator',
   location: 'Dubai Distribution Centre',
   supervisor: 'Marcus Vance (Shift Lead)',
   avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
-  email: 'alex.morgan@shift-logistics.ae',
+  email: 'rahaf@shift-logistics.ae',
   phone: '+971 50 492 8810',
 };
 

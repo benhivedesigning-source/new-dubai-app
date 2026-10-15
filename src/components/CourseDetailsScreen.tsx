@@ -5,12 +5,11 @@ import { Clock, BookOpen, CheckCircle2, Play, Globe, Award, ShieldAlert, AlertCi
 import { motion } from 'motion/react';
 
 export const CourseDetailsScreen: React.FC = () => {
-  const { courses, selectedCourseId, setScreen } = useApp();
+  const { courses, selectedCourseId, setScreen, t, isRtl } = useApp();
 
   const course = courses.find(c => c.id === selectedCourseId) || courses[0];
 
   const handleStartOrResume = () => {
-    // Find first incomplete lesson or start assessment if all lessons complete
     const firstIncomplete = course.lessons.find(l => !l.completed);
     if (firstIncomplete || course.lessons.length === 0) {
       setScreen('learning_player');
@@ -21,7 +20,7 @@ export const CourseDetailsScreen: React.FC = () => {
 
   return (
     <div className="min-h-screen pb-28 bg-[#F6F5F0]">
-      <HeaderBar title="Course Overview" showBack onBack={() => setScreen('my_training')} />
+      <HeaderBar title={t.course_overview} showBack onBack={() => setScreen('my_training')} />
 
       <main className="max-w-md mx-auto px-4 py-5 space-y-5">
         {/* Course Header Hero Card */}
@@ -50,10 +49,10 @@ export const CourseDetailsScreen: React.FC = () => {
               <div className="flex items-center gap-2 mb-1.5">
                 {course.isMandatory && (
                   <span className="text-[10px] font-bold bg-[#C44724]/10 text-[#C44724] px-2 py-0.5 rounded uppercase">
-                    Mandatory Compliance
+                    {t.mandatory}
                   </span>
                 )}
-                <span className="text-[10px] font-semibold text-[#172321]/60">Due: {course.dueDate}</span>
+                <span className="text-[10px] font-semibold text-[#172321]/60">{t.due}: {course.dueDate}</span>
               </div>
               <h2 className="text-xl font-bold text-[#172321] font-['Manrope']">{course.title}</h2>
               <p className="text-xs text-[#172321]/70 mt-1 leading-relaxed">{course.description}</p>
@@ -62,7 +61,7 @@ export const CourseDetailsScreen: React.FC = () => {
             {/* Progress */}
             <div className="bg-[#F6F5F0] p-3.5 rounded-2xl space-y-2">
               <div className="flex justify-between text-xs font-bold">
-                <span className="text-[#172321]/80">Course Completion</span>
+                <span className="text-[#172321]/80">{t.progress}</span>
                 <span className="text-[#C44724]">{course.progress}%</span>
               </div>
               <div className="w-full h-2 bg-[#DFE3DC] rounded-full overflow-hidden">
@@ -77,15 +76,24 @@ export const CourseDetailsScreen: React.FC = () => {
               </div>
               <div className="flex items-center gap-2 text-[#172321]/80 bg-[#F6F5F0] p-2.5 rounded-xl">
                 <Award className="w-4 h-4 text-[#24624B]" />
-                <span>Certificate on Pass</span>
+                <span>{t.certificate_on_pass}</span>
               </div>
             </div>
+
+            {/* In-card Action Button */}
+            <button
+              onClick={handleStartOrResume}
+              className="w-full bg-[#C44724] hover:bg-[#b03d1c] text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-xs active:scale-[0.98]"
+            >
+              <span>{course.progress === 0 ? t.start_training : course.progress === 100 ? t.review_course : t.resume_training}</span>
+              <Play className={`w-3.5 h-3.5 fill-white ${isRtl ? 'rotate-180' : ''}`} />
+            </button>
           </div>
         </div>
 
         {/* Topics & Learning Path */}
         <div className="bg-white rounded-3xl border border-[#DFE3DC] p-5 space-y-4 shadow-sm">
-          <h3 className="text-sm font-bold text-[#172321] font-['Manrope']">Learning Path & Lessons</h3>
+          <h3 className="text-sm font-bold text-[#172321] font-['Manrope']">{t.syllabus}</h3>
           
           <div className="space-y-2.5">
             {course.lessons.map((lesson, index) => (
@@ -109,8 +117,9 @@ export const CourseDetailsScreen: React.FC = () => {
                     <p className="text-[10px] text-[#172321]/60">{lesson.duration} · {lesson.type}</p>
                   </div>
                 </div>
-                <span className="text-xs font-semibold text-[#C44724]">
-                  {lesson.completed ? 'Completed' : 'Start →'}
+                <span className="text-xs font-semibold text-[#C44724] flex items-center gap-1">
+                  <span>{lesson.completed ? t.course_completed : t.start_training}</span>
+                  <span className={`${isRtl ? 'rotate-180' : ''}`}>→</span>
                 </span>
               </div>
             ))}
@@ -119,7 +128,7 @@ export const CourseDetailsScreen: React.FC = () => {
 
         {/* Completion Requirements */}
         <div className="bg-white rounded-3xl border border-[#DFE3DC] p-5 space-y-3 shadow-sm">
-          <h3 className="text-sm font-bold text-[#172321] font-['Manrope']">Completion Requirements</h3>
+          <h3 className="text-sm font-bold text-[#172321] font-['Manrope']">{t.prerequisites}</h3>
           <ul className="space-y-2 text-xs text-[#172321]/80">
             {course.requirements.map((req, i) => (
               <li key={i} className="flex items-start gap-2.5">
@@ -130,7 +139,6 @@ export const CourseDetailsScreen: React.FC = () => {
           </ul>
         </div>
       </main>
-
     </div>
   );
 };

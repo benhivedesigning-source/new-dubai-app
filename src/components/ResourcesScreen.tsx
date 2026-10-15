@@ -7,7 +7,7 @@ import { motion } from 'motion/react';
 type CategoryType = 'All' | 'SOPs' | 'Emergency Contacts' | 'Quick Guides' | 'Policies';
 
 export const ResourcesScreen: React.FC = () => {
-  const { resources, showToast } = useApp();
+  const { resources, showToast, t, isRtl } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<CategoryType>('All');
 
@@ -31,18 +31,18 @@ export const ResourcesScreen: React.FC = () => {
 
   return (
     <div className="min-h-screen pb-28 bg-[#F6F5F0]">
-      <HeaderBar title="Safety Resources" subtitle="Standard operating procedures & emergency contacts" />
+      <HeaderBar title={t.resources_title} subtitle={t.resources_subtitle} />
 
       <main className="max-w-md mx-auto px-4 py-4 space-y-4">
         {/* Search Input */}
         <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#172321]/40" />
+          <Search className={`absolute ${isRtl ? 'right-3.5' : 'left-3.5'} top-1/2 -translate-y-1/2 w-4 h-4 text-[#172321]/40`} />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search SOPs, emergency contacts, policies..."
-            className="w-full bg-white border border-[#DFE3DC] rounded-xl pl-10 pr-4 py-3 text-xs font-medium text-[#172321] focus:outline-none focus:border-[#C44724] shadow-xs"
+            placeholder={t.search_placeholder}
+            className={`w-full bg-white border border-[#DFE3DC] rounded-xl ${isRtl ? 'pr-10 pl-4 text-right' : 'pl-10 pr-4 text-left'} py-3 text-xs font-medium text-[#172321] focus:outline-none focus:border-[#C44724] shadow-xs`}
           />
         </div>
 

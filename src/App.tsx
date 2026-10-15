@@ -19,6 +19,7 @@ import { CertificatesScreen } from './components/CertificatesScreen';
 import { ResourcesScreen } from './components/ResourcesScreen';
 import { ProfileScreen } from './components/ProfileScreen';
 import { NotificationsScreen } from './components/NotificationsScreen';
+import { ForgotPasswordScreen } from './components/ForgotPasswordScreen';
 import { Wifi, Battery, Signal } from 'lucide-react';
 
 const StatusBar: React.FC = () => {
@@ -40,17 +41,17 @@ const StatusBar: React.FC = () => {
 };
 
 const MainNavigator: React.FC = () => {
-  const { isLoggedIn, screen } = useApp();
+  const { isLoggedIn, screen, isRtl } = useApp();
 
   if (!isLoggedIn) {
     return (
       <div className="min-h-screen bg-[#111816] flex items-center justify-center p-0 sm:p-6">
         {/* Smartphone Device Frame */}
-        <div className="w-full sm:max-w-[410px] min-h-screen sm:min-h-[850px] sm:max-h-[900px] bg-[#F6F5F0] sm:rounded-[48px] sm:border-[10px] sm:border-[#22302c] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] relative flex flex-col justify-between overflow-hidden">
+        <div dir={isRtl ? 'rtl' : 'ltr'} className="w-full sm:max-w-[410px] min-h-screen sm:min-h-[850px] sm:max-h-[900px] bg-[#F6F5F0] sm:rounded-[48px] sm:border-[10px] sm:border-[#22302c] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] relative flex flex-col justify-between overflow-hidden">
           <div className="flex flex-col flex-1 min-h-0">
             <StatusBar />
             <div className="flex-1 overflow-y-auto min-h-0 relative flex flex-col">
-              <LoginScreen />
+              {screen === 'forgot_password' ? <ForgotPasswordScreen /> : <LoginScreen />}
             </div>
           </div>
           {/* Home indicator bar */}
@@ -65,7 +66,7 @@ const MainNavigator: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#111816] flex items-center justify-center p-0 sm:p-6 selection:bg-[#C44724] selection:text-white">
       {/* Smartphone Device Frame */}
-      <div className="w-full sm:max-w-[410px] min-h-screen sm:min-h-[850px] sm:max-h-[900px] bg-[#F6F5F0] sm:rounded-[48px] sm:border-[10px] sm:border-[#22302c] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] relative flex flex-col justify-between overflow-hidden">
+      <div dir={isRtl ? 'rtl' : 'ltr'} className="w-full sm:max-w-[410px] min-h-screen sm:min-h-[850px] sm:max-h-[900px] bg-[#F6F5F0] sm:rounded-[48px] sm:border-[10px] sm:border-[#22302c] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)] relative flex flex-col justify-between overflow-hidden">
         
         {/* Top Group: Status Bar + Scrollable Content */}
         <div className="flex flex-col flex-1 min-h-0">

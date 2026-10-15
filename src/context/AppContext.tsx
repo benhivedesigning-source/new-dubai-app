@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Course, Certificate, SafetyResource, AppNotification, UserProfile, Language, NotificationPreferences } from '../types/safety';
 import { initialUserProfile, initialCourses, initialCertificates, initialResources, initialNotifications } from '../data/mockData';
+import { translations, Translations } from '../utils/translations';
 
 export type ScreenType = 
   | 'login'
@@ -14,7 +15,8 @@ export type ScreenType =
   | 'resources'
   | 'profile'
   | 'safety_assistant'
-  | 'notifications';
+  | 'notifications'
+  | 'forgot_password';
 
 export type BottomNavTab = 'home' | 'my_training' | 'safety_assistant' | 'profile';
 
@@ -25,6 +27,8 @@ interface AppContextType {
   setActiveTab: (tab: BottomNavTab) => void;
   language: Language;
   setLanguage: (lang: Language) => void;
+  isRtl: boolean;
+  t: Translations;
   isLoggedIn: boolean;
   setIsLoggedIn: (val: boolean) => void;
   userProfile: UserProfile;
@@ -58,6 +62,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [screen, setScreen] = useState<ScreenType>('login');
   const [activeTab, setActiveTab] = useState<BottomNavTab>('home');
   const [language, setLanguage] = useState<Language>('English');
+  const isRtl = language === 'العربية' || language === 'اردو';
+  const t: Translations = translations[language] || translations.English;
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userProfile, setUserProfile] = useState<UserProfile>(initialUserProfile);
   const [courses, setCourses] = useState<Course[]>(() => {
@@ -80,7 +86,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [chatMessages, setChatMessages] = useState<Array<{ role: 'user' | 'assistant'; text: string; sources?: Array<{ title: string; section: string; version: string }> }>>([
     {
       role: 'assistant',
-      text: 'Hello Alex! I am your SHIFT Safety Assistant. What safety question or procedure can I help with today?',
+      text: 'Hello Rahaf! I am your SHIFT Safety Assistant. What safety question or procedure can I help with today?',
       sources: [
         { title: 'Dubai Distribution Centre Safety Handbook', section: 'Overview', version: 'v4.0' }
       ]
@@ -228,6 +234,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setActiveTab,
       language,
       setLanguage,
+      isRtl,
+      t,
       isLoggedIn,
       setIsLoggedIn,
       userProfile,

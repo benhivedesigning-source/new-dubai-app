@@ -1,20 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
-import { HeaderBar } from './HeaderBar';
 import { Bot, Send, Sparkles, FileText, AlertCircle, ShieldAlert } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export const SafetyAssistantScreen: React.FC = () => {
-  const { chatMessages, sendChatMessage, isChatLoading, language, setScreen, setSelectedCourseId } = useApp();
+  const { chatMessages, sendChatMessage, isChatLoading, language, setScreen, setSelectedCourseId, t, isRtl } = useApp();
   const [inputText, setInputText] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const suggestedQuestions = [
-    'Where can I find the PPE procedure?',
-    'How do I report a warehouse hazard?',
-    'Where is the evacuation procedure?',
-    'What training do I still need to complete?'
-  ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -32,10 +24,6 @@ export const SafetyAssistantScreen: React.FC = () => {
     sendChatMessage(msg);
   };
 
-  const handleSuggestionClick = (q: string) => {
-    sendChatMessage(q);
-  };
-
   return (
     <div className="h-full flex flex-col bg-[#F6F5F0] pb-0">
       {/* Chat Messages Scrollable Area */}
@@ -44,7 +32,7 @@ export const SafetyAssistantScreen: React.FC = () => {
         {chatMessages.map((msg, idx) => (
           <div
             key={idx}
-            className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
+            className={`flex flex-col ${msg.role === 'user' ? (isRtl ? 'items-start' : 'items-end') : (isRtl ? 'items-end' : 'items-start')}`}
           >
             <div className={`max-w-[85%] p-4 rounded-3xl text-xs leading-relaxed ${
               msg.role === 'user'
@@ -56,7 +44,7 @@ export const SafetyAssistantScreen: React.FC = () => {
               {/* Source Cards */}
               {msg.sources && msg.sources.length > 0 && (
                 <div className="pt-2 border-t border-[#DFE3DC] space-y-1.5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#172321]/60">Approved Sources</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#172321]/60">{t.approved_sources}</span>
                   <div className="space-y-1">
                     {msg.sources.map((src, sIdx) => (
                       <div key={sIdx} className="bg-[#F6F5F0] p-2 rounded-xl flex items-center gap-2 text-[11px] text-[#172321]">
@@ -90,7 +78,7 @@ export const SafetyAssistantScreen: React.FC = () => {
         {/* Emergency Context Footer Note */}
         <div className="px-6 py-1.5 bg-[#C44724]/10 border-b border-[#C44724]/20 text-center">
           <p className="text-[10px] text-[#172321]/80 font-medium">
-            For an immediate hazard or emergency, follow your site’s emergency procedure.
+            {t.emergency_note}
           </p>
         </div>
 
@@ -100,15 +88,15 @@ export const SafetyAssistantScreen: React.FC = () => {
               type="text"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder="Ask a safety or procedure question..."
-              className="flex-1 bg-[#F6F5F0] border border-[#DFE3DC] rounded-xl px-4 py-3 text-xs font-medium text-[#172321] focus:outline-none focus:border-[#C44724]"
+              placeholder={t.ask_placeholder}
+              className={`flex-1 bg-[#F6F5F0] border border-[#DFE3DC] rounded-xl px-4 py-3 text-xs font-medium text-[#172321] focus:outline-none focus:border-[#C44724] ${isRtl ? 'text-right' : 'text-left'}`}
             />
             <button
               type="submit"
               disabled={!inputText.trim() || isChatLoading}
-              className="w-11 h-11 rounded-xl bg-[#C44724] hover:bg-[#b03d1c] disabled:opacity-50 text-white flex items-center justify-center shadow-md transition-all shrink-0"
+              className="w-11 h-11 rounded-xl bg-[#C44724] hover:bg-[#b03d1c] disabled:opacity-50 text-white flex items-center justify-center shadow-md transition-all shrink-0 active:scale-95"
             >
-              <Send className="w-4 h-4" />
+              <Send className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
             </button>
           </form>
         </div>

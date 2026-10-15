@@ -6,7 +6,7 @@ import { Award, Download, CheckCircle2, AlertTriangle, Clock, X, ShieldCheck } f
 import { motion, AnimatePresence } from 'motion/react';
 
 export const CertificatesScreen: React.FC = () => {
-  const { certificates, showToast } = useApp();
+  const { certificates, showToast, t } = useApp();
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
 
   const handleDownload = (cert: Certificate) => {
@@ -15,7 +15,7 @@ export const CertificatesScreen: React.FC = () => {
 
   return (
     <div className="min-h-screen pb-28 bg-[#F6F5F0]">
-      <HeaderBar title="Certificates & Qualifications" subtitle="Earned credentials and compliance status" />
+      <HeaderBar title={t.certificates_title} subtitle={t.certificates_subtitle} />
 
       <main className="max-w-md mx-auto px-4 py-5 space-y-4">
         {certificates.map(cert => (

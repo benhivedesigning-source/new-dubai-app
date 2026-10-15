@@ -4,7 +4,7 @@ import { Play, Pause, Volume2, ArrowLeft, ArrowRight, CheckCircle2, ShieldCheck,
 import { motion } from 'motion/react';
 
 export const LearningPlayerScreen: React.FC = () => {
-  const { courses, selectedCourseId, setScreen, completeLesson, acknowledgeLessonPolicy, showToast } = useApp();
+  const { courses, selectedCourseId, setScreen, completeLesson, acknowledgeLessonPolicy, showToast, t, isRtl, language } = useApp();
   const course = courses.find(c => c.id === selectedCourseId) || courses[0];
   
   const [currentLessonIndex, setCurrentLessonIndex] = useState(() => {
@@ -133,16 +133,16 @@ export const LearningPlayerScreen: React.FC = () => {
           onClick={handlePrevLesson}
           className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold flex items-center gap-2"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Previous</span>
+          <ArrowLeft className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
+          <span>{t.back}</span>
         </button>
 
         <button
           onClick={handleNextLesson}
-          className="px-6 py-2.5 rounded-xl bg-[#C44724] hover:bg-[#b03d1c] text-white text-xs font-bold flex items-center gap-2 shadow-lg"
+          className="px-6 py-2.5 rounded-xl bg-[#C44724] hover:bg-[#b03d1c] text-white text-xs font-bold flex items-center gap-2 shadow-lg active:scale-95 transition-all"
         >
-          <span>{currentLessonIndex === course.lessons.length - 1 ? 'Take Assessment' : 'Next Lesson'}</span>
-          <ArrowRight className="w-4 h-4" />
+          <span>{currentLessonIndex === course.lessons.length - 1 ? (language === 'العربية' ? 'بدء الاختبار' : language === 'हिन्दी' ? 'मूल्यांकन शुरू करें' : language === 'اردو' ? 'امتحان شروع کریں' : 'Take Assessment') : (language === 'العربية' ? 'الدرس التالي' : language === 'हिन्दी' ? 'अगला पाठ' : language === 'اردو' ? 'اگلا سبق' : 'Next Lesson')}</span>
+          <ArrowRight className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
         </button>
       </div>
     </div>

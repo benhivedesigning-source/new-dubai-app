@@ -4,7 +4,7 @@ import { Home, BookOpen, Bot, User } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export const BottomNav: React.FC = () => {
-  const { activeTab, setActiveTab, setScreen, screen, reducedMotion } = useApp();
+  const { activeTab, setActiveTab, setScreen, screen, reducedMotion, t } = useApp();
 
   // Hide bottom nav during login, learning player, assessment, or results
   const hiddenScreens: ScreenType[] = ['login', 'learning_player', 'assessment', 'results'];
@@ -13,10 +13,10 @@ export const BottomNav: React.FC = () => {
   }
 
   const navItems: Array<{ id: BottomNavTab; label: string; icon: React.FC<{ className?: string }>; targetScreen: ScreenType }> = [
-    { id: 'home', label: 'Home', icon: Home, targetScreen: 'home' },
-    { id: 'my_training', label: 'My Training', icon: BookOpen, targetScreen: 'my_training' },
-    { id: 'safety_assistant', label: 'Safety Assistant', icon: Bot, targetScreen: 'safety_assistant' },
-    { id: 'profile', label: 'Profile', icon: User, targetScreen: 'profile' },
+    { id: 'home', label: t.home, icon: Home, targetScreen: 'home' },
+    { id: 'my_training', label: t.my_training, icon: BookOpen, targetScreen: 'my_training' },
+    { id: 'safety_assistant', label: t.safety_assistant, icon: Bot, targetScreen: 'safety_assistant' },
+    { id: 'profile', label: t.profile, icon: User, targetScreen: 'profile' },
   ];
 
   const handleTabClick = (tab: BottomNavTab, target: ScreenType) => {

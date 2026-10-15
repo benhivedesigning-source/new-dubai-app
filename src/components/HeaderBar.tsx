@@ -10,7 +10,7 @@ interface HeaderBarProps {
 }
 
 export const HeaderBar: React.FC<HeaderBarProps> = ({ title, subtitle, showBack, onBack }) => {
-  const { userProfile, notifications, setScreen } = useApp();
+  const { userProfile, notifications, setScreen, t, isRtl } = useApp();
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
@@ -24,7 +24,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ title, subtitle, showBack,
                 onClick={onBack}
                 className="w-9 h-9 rounded-xl bg-white border border-[#DFE3DC] flex items-center justify-center text-[#172321] hover:bg-[#F0EEE6] transition-all shadow-xs"
               >
-                ←
+                {isRtl ? '→' : '←'}
               </button>
             ) : (
               <div 
@@ -39,7 +39,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({ title, subtitle, showBack,
               {title ? (
                 <h1 className="text-base font-bold text-[#172321] font-['Manrope'] tracking-tight">{title}</h1>
               ) : (
-                <h1 className="text-base font-bold text-[#172321] font-['Manrope'] tracking-tight">Good morning, {userProfile.name.split(' ')[0]}.</h1>
+                <h1 className="text-base font-bold text-[#172321] font-['Manrope'] tracking-tight">{t.good_morning}, {t.user_name}.</h1>
               )}
               {subtitle ? (
                 <p className="text-xs text-[#172321]/70">{subtitle}</p>

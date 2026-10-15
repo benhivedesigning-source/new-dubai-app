@@ -13,7 +13,9 @@ export const NotificationsScreen: React.FC = () => {
     markAllNotificationsRead, 
     setScreen, 
     setSelectedCourseId,
-    reducedMotion 
+    reducedMotion,
+    t,
+    isRtl
   } = useApp();
 
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
@@ -40,8 +42,8 @@ export const NotificationsScreen: React.FC = () => {
   return (
     <div className="min-h-full pb-24 bg-[#F6F5F0] flex flex-col">
       <HeaderBar 
-        title="Notifications" 
-        subtitle="Alerts, assignments & reminders" 
+        title={t.notifications} 
+        subtitle={t.alerts_sub} 
         showBack 
         onBack={() => setScreen('home')} 
       />
@@ -50,14 +52,14 @@ export const NotificationsScreen: React.FC = () => {
         {/* Controls Bar: Unread summary and Mark all as read */}
         <div className="flex items-center justify-between bg-white px-4 py-3 rounded-2xl border border-[#DFE3DC] shadow-xs">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-[#172321]">Activity Feed</span>
+            <span className="text-xs font-bold text-[#172321]">{t.activity_feed}</span>
             {unreadCount > 0 ? (
               <span className="bg-[#C44724] text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-                {unreadCount} new
+                {t.new_badge(unreadCount)}
               </span>
             ) : (
               <span className="bg-[#24624B]/10 text-[#24624B] text-[10px] font-semibold px-2 py-0.5 rounded-full">
-                All caught up
+                {t.all_caught_up}
               </span>
             )}
           </div>
@@ -68,7 +70,7 @@ export const NotificationsScreen: React.FC = () => {
               className="text-xs font-semibold text-[#C44724] hover:underline flex items-center gap-1 active:scale-95 transition-transform"
             >
               <CheckCheck className="w-3.5 h-3.5" />
-              <span>Mark all read</span>
+              <span>{t.mark_all_read}</span>
             </button>
           )}
         </div>
@@ -77,10 +79,10 @@ export const NotificationsScreen: React.FC = () => {
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
           {(
             [
-              { id: 'all', label: 'All' },
-              { id: 'unread', label: `Unread (${unreadCount})` },
-              { id: 'assignment', label: 'Assignments' },
-              { id: 'reminder', label: 'Reminders' },
+              { id: 'all', label: t.all },
+              { id: 'unread', label: `${t.not_started} (${unreadCount})` },
+              { id: 'assignment', label: t.pref_assignments },
+              { id: 'reminder', label: t.pref_due_reminders },
             ] as const
           ).map(tab => (
             <button
@@ -104,9 +106,9 @@ export const NotificationsScreen: React.FC = () => {
               <div className="w-12 h-12 bg-[#F6F5F0] rounded-2xl flex items-center justify-center mx-auto mb-3 text-[#172321]/40">
                 <Bell className="w-6 h-6" />
               </div>
-              <h4 className="text-sm font-bold text-[#172321]">No notifications</h4>
+              <h4 className="text-sm font-bold text-[#172321]">{t.no_notifications}</h4>
               <p className="text-xs text-[#172321]/60 mt-1">
-                {activeFilter === 'unread' ? 'You have reviewed all your alerts.' : 'No items match the selected filter.'}
+                {t.no_notifications_sub}
               </p>
             </div>
           ) : (
@@ -158,8 +160,8 @@ export const NotificationsScreen: React.FC = () => {
                       {n.linkScreen && (
                         <div className="mt-2.5 pt-2 border-t border-[#DFE3DC]/60 flex items-center justify-between">
                           <span className="text-[10px] font-semibold text-[#C44724] flex items-center gap-1 group">
-                            <span>{n.type === 'assignment' ? 'Start course' : n.type === 'expiry' ? 'Review qualification' : 'View details'}</span>
-                            <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                            <span>{n.type === 'assignment' ? t.start_training : n.type === 'expiry' ? t.my_certificates : t.view_all}</span>
+                            <ArrowRight className={`w-3 h-3 group-hover:translate-x-0.5 transition-transform ${isRtl ? 'rotate-180' : ''}`} />
                           </span>
                           <span className="text-[9px] uppercase tracking-wider font-bold text-[#172321]/40">
                             {n.type}

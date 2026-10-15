@@ -2,17 +2,23 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { HeaderBar } from './HeaderBar';
 import { CourseStatus } from '../types/safety';
-import { Search, Clock, CheckCircle2, AlertCircle, Play, ArrowRight } from 'lucide-react';
+import { Search, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
 import { motion } from 'motion/react';
 
 type FilterType = 'All' | 'Not started' | 'In progress' | 'Completed' | 'Overdue';
 
 export const MyTrainingScreen: React.FC = () => {
-  const { courses, setSelectedCourseId, setScreen } = useApp();
+  const { courses, setSelectedCourseId, setScreen, t, isRtl } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<FilterType>('All');
 
-  const filterTabs: FilterType[] = ['All', 'Not started', 'In progress', 'Completed', 'Overdue'];
+  const filterTabs: Array<{ id: FilterType; label: string }> = [
+    { id: 'All', label: t.all },
+    { id: 'Not started', label: t.not_started },
+    { id: 'In progress', label: t.in_progress },
+    { id: 'Completed', label: t.completed },
+    { id: 'Overdue', label: t.overdue },
+  ];
 
   const filteredCourses = courses.filter(course => {
     const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -34,20 +40,28 @@ export const MyTrainingScreen: React.FC = () => {
     setScreen('course_details');
   };
 
+  const getStatusLabel = (status: CourseStatus) => {
+    if (status === 'completed') return t.completed;
+    if (status === 'in_progress') return t.in_progress;
+    if (status === 'not_started') return t.not_started;
+    if (status === 'overdue') return t.overdue;
+    return status;
+  };
+
   return (
     <div className="min-h-screen pb-24 bg-[#F6F5F0]">
-      <HeaderBar title="My Training" subtitle="Assigned safety modules and compliance" />
+      <HeaderBar title={t.my_training} subtitle={t.assigned_modules_sub} />
 
       <main className="max-w-md mx-auto px-4 py-4 space-y-4">
         {/* Search Input */}
         <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#172321]/40" />
+          <Search className={`absolute ${isRtl ? 'right-3.5' : 'left-3.5'} top-1/2 -translate-y-1/2 w-4 h-4 text-[#172321]/40`} />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search training modules, SOPs, PPE..."
-            className="w-full bg-white border border-[#DFE3DC] rounded-xl pl-10 pr-4 py-3 text-xs font-medium text-[#172321] focus:outline-none focus:border-[#C44724] shadow-xs"
+            placeholder={t.search_placeholder}
+            className={`w-full bg-white border border-[#DFE3DC] rounded-xl ${isRtl ? 'pr-10 pl-4 text-right' : 'pl-10 pr-4 text-left'} py-3 text-xs font-medium text-[#172321] focus:outline-none focus:border-[#C44724] shadow-xs`}
           />
         </div>
 
@@ -55,15 +69,15 @@ export const MyTrainingScreen: React.FC = () => {
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
           {filterTabs.map(tab => (
             <button
-              key={tab}
-              onClick={() => setActiveFilter(tab)}
+              key={tab.id}
+              onClick={() => setActiveFilter(tab.id)}
               className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                activeFilter === tab
+                activeFilter === tab.id
                   ? 'bg-[#172321] text-white shadow-sm'
                   : 'bg-white text-[#172321]/80 border border-[#DFE3DC] hover:bg-[#F0EEE6]'
               }`}
             >
-              {tab}
+              {tab.label}
             </button>
           ))}
         </div>
@@ -91,7 +105,7 @@ export const MyTrainingScreen: React.FC = () => {
                     <div className="flex items-center gap-2 mb-1">
                       {course.isMandatory && (
                         <span className="text-[9px] font-bold bg-[#C44724]/10 text-[#C44724] px-2 py-0.5 rounded-md uppercase tracking-wider">
-                          Mandatory
+                          {t.mandatory}
                         </span>
                       )}
                       <span className={`text-[9px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${
@@ -99,7 +113,7 @@ export const MyTrainingScreen: React.FC = () => {
                         course.status === 'overdue' ? 'bg-[#C44724] text-white' :
                         course.status === 'in_progress' ? 'bg-[#FF734A]/10 text-[#FF734A]' : 'bg-[#DFE3DC] text-[#172321]/80'
                       }`}>
-                        {course.status.replace('_', ' ')}
+                        {getStatusLabel(course.status)}
                       </span>
                     </div>
                     <h3 className="text-sm font-bold text-[#172321] font-['Manrope']">{course.title}</h3>
@@ -125,11 +139,11 @@ export const MyTrainingScreen: React.FC = () => {
                       <Clock className="w-3.5 h-3.5" />
                       {course.duration}
                     </span>
-                    <span>Due: {course.dueDate}</span>
+                    <span>{t.due}: {course.dueDate}</span>
                   </div>
                   <span className="font-semibold text-[#C44724] flex items-center gap-1">
-                    {course.status === 'completed' ? 'Review' : course.status === 'in_progress' ? 'Resume' : 'Start'}
-                    →
+                    {course.status === 'completed' ? t.review_course : course.status === 'in_progress' ? t.resume_training : t.start_training}
+                    <span className={`${isRtl ? 'rotate-180' : ''}`}>→</span>
                   </span>
                 </div>
               </motion.div>
