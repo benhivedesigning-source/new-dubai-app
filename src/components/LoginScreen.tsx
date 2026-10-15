@@ -149,7 +149,7 @@ export const LoginScreen: React.FC = () => {
               value={employeeId}
               onChange={(e) => setEmployeeId(e.target.value)}
               required
-              className="w-full bg-white border border-[#DFE3DC] rounded-2xl px-4 py-3.5 text-xs font-medium text-[#172321] focus:outline-none focus:border-[#C44724] transition-all shadow-xs"
+              className="w-full relative bg-[#FFFFFF] border border-[#DFE3DC] rounded-2xl px-4 py-3.5 text-xs font-medium text-[#172321] focus:outline-none focus:border-[#C44724] focus:bg-[#FFFFFF] transition-all shadow-xs placeholder-[#172321]/40"
               placeholder="e.g. EMP-89420"
             />
           </div>
@@ -173,7 +173,7 @@ export const LoginScreen: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full bg-white border border-[#DFE3DC] rounded-2xl pl-4 pr-11 py-3.5 text-xs font-medium text-[#172321] focus:outline-none focus:border-[#C44724] transition-all shadow-xs"
+                className="w-full bg-[#FFFFFF] border border-[#DFE3DC] rounded-2xl pl-4 pr-11 py-3.5 text-xs font-medium text-[#172321] focus:outline-none focus:border-[#C44724] focus:bg-[#FFFFFF] transition-all shadow-xs"
               />
               <button
                 type="button"
